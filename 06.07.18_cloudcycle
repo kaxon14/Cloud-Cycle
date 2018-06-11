@@ -1,0 +1,74 @@
+##### Last Updated: 06/11/2018 
+
+# By: Kristen Axon
+
+# This notebook is utilizing data gathered from the MAPP (Multiphase Aging and Production of Particles) cloud chamber
+# The focus is before, during, and after the cloud cycle and aims to analyze the set-point, or expected pressure and 
+# temperature, versus the measured pressure and temperature values throughout the cloud cycle. 
+
+# importing panda module in order to read in excel sheet data
+import pandas as pd
+from pandas import ExcelWriter
+from pandas import ExcelFile
+import matplotlib.pyplot as plt
+
+# pathway to excel sheet
+excel = r'C:\Users\Kristen\Documents\CloudCycle\06072018.xlsx' 
+
+# finding file to access data
+df = pd.read_excel(excel, sheet_name ='Sheet1')
+
+# renaming variables for easier use and truncating data 
+time = df['newtime_s'][0:950]
+
+# input variables
+pres_in = df['ma_EN_Pabs-in'][0:950]
+tempc_in= df['ma_RE_T_avg-in'][0:950]
+
+# setpoint variables
+pres_sp = df['ma_EN_Pabs-sp'][0:950]
+tempc_sp = df['ma_RE_T_avg-sp'][0:950]
+
+########### Pressure Plot ###########
+
+# setting up figure
+fig1 =plt.figure(1,figsize=(17.,11.))
+
+# setting x & y variables where x will be time in seconds and y is temperature in Celsius 
+x = time
+y1 = pres_sp
+y2 = pres_in
+
+# modifying plot settings/visuals
+plt.plot(x,y1, c ='c', ls = '-', lw = 6.5, alpha = 0.4)
+plt.plot(x, y2, c ='k', ls = '-', lw = 2)
+
+plt.title(('06/07/2018 Cloud Cycle: Pressure'), fontsize = 20)
+plt.legend(('Setpoint', 'Input'), loc = 7, fontsize = 14, labelspacing = 2, )
+plt.ylabel('Pressure (mb)', fontsize = 16)
+plt.xlabel('Time (seconds)', fontsize = 16)
+
+plt.show()
+fig1.savefig('06.07.2018_pres.png', dpi=60)
+
+########### Temperature Plot ###########
+
+# setting up figure
+fig2 =plt.figure(2,figsize=(17.,11.))
+
+# setting x & y variables where x will be time in seconds and y will be temperature in Celsius 
+x = time
+y1 = tempc_sp
+y2 = tempc_in
+
+# modifying plot settings/visuals
+plt.plot(x,y1, c ='r', ls = '-', lw = 6, alpha = 0.4)
+plt.plot(x, y2, c ='k', ls = '-', lw = 2)
+
+plt.title(('06/07/2018 Cloud Cycle: Temperature'), fontsize = 20)
+plt.legend(('Setpoint', 'Input'), loc = 7, fontsize = 14, labelspacing = 2)
+plt.ylabel('Temperature (C)', fontsize = 16)
+plt.xlabel('Time (seconds)', fontsize = 16)
+
+plt.show()
+fig2.savefig('06.07.2018_temp.png', dpi=60)
